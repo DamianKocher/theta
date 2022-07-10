@@ -1,7 +1,7 @@
 package com.damiankocher.theta.server.content.reddit;
 
-import com.damiankocher.theta.server.audio.AudioSource;
 import com.damiankocher.theta.server.audio.AudioManager;
+import com.damiankocher.theta.server.audio.AudioSource;
 import com.damiankocher.theta.server.content.Section;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,7 +12,7 @@ public class RedditComment extends Section {
 	private @Nullable AudioSource audio;
 
 	public RedditComment() {
-		super("reddit_comment", true, false, false,true, true, 0);
+		super("reddit_comment", true, false, false, true, true, 0);
 	}
 
 	public RedditComment(final @NotNull AudioManager audioManager, final @NotNull String text) {

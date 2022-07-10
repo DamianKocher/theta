@@ -38,14 +38,14 @@ public class Main {
 		app.get("/content", ctx -> ctx.contentType("application/json").result(jsonSerializer.toJson(content)));
 	}
 
-	private @NotNull Script parseScript(final @NotNull Path scriptPath) throws IOException {
-		final var reader = Files.newBufferedReader(scriptPath);
-		return new Gson().fromJson(reader, Script.class);
-	}
-
 	public static void main(String[] args) throws IOException {
 		final var dataPath = Path.of("data");
 
 		new Main(dataPath.resolve("script.json"), dataPath.resolve("cache"), dataPath.resolve("text-replacements.json"), dataPath.resolve("backgrounds"));
+	}
+
+	private @NotNull Script parseScript(final @NotNull Path scriptPath) throws IOException {
+		final var reader = Files.newBufferedReader(scriptPath);
+		return new Gson().fromJson(reader, Script.class);
 	}
 }

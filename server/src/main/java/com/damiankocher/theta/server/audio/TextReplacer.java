@@ -8,25 +8,25 @@ import java.util.Map;
 
 public class TextReplacer {
 
-    private static final @NotNull Logger log = LoggerFactory.getLogger(TextReplacer.class);
+	private static final @NotNull Logger log = LoggerFactory.getLogger(TextReplacer.class);
 
-    private @NotNull final Map<String, String> replacements;
+	private final @NotNull Map<String, String> replacements;
 
-    public TextReplacer(final @NotNull Map<String, String> replacements) {
-        this.replacements = replacements;
-    }
+	public TextReplacer(final @NotNull Map<String, String> replacements) {
+		this.replacements = replacements;
+	}
 
-    public @NotNull String replaceText(final @NotNull String originalText) {
-        String text = originalText;
-        for (final Map.Entry<String, String> entry : replacements.entrySet()) {
-            text = text.replace(entry.getKey(), entry.getValue());
-        }
-        return text;
-    }
+	public @NotNull String replaceText(final @NotNull String originalText) {
+		String text = originalText;
+		for (final Map.Entry<String, String> entry : replacements.entrySet()) {
+			text = text.replace(entry.getKey(), entry.getValue());
+		}
+		return text;
+	}
 
-    public void logReplacements() {
-        for (final Map.Entry<String, String> entry : replacements.entrySet()) {
-            log.info("TEXT REPLACEMENT: {} -> {}", entry.getKey(), entry.getValue());
-        }
-    }
+	public void logReplacements() {
+		for (final Map.Entry<String, String> entry : replacements.entrySet()) {
+			log.info("TEXT REPLACEMENT: {} -> {}", entry.getKey(), entry.getValue());
+		}
+	}
 }

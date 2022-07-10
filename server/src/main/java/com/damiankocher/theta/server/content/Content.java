@@ -1,8 +1,8 @@
 package com.damiankocher.theta.server.content;
 
-import com.damiankocher.theta.server.audio.AudioSource;
-import com.damiankocher.theta.server.audio.AudioManager;
 import com.damiankocher.theta.server.Script;
+import com.damiankocher.theta.server.audio.AudioManager;
+import com.damiankocher.theta.server.audio.AudioSource;
 import com.damiankocher.theta.server.content.reddit.RedditComment;
 import com.damiankocher.theta.server.content.reddit.RedditTitleCard;
 import com.google.gson.Gson;

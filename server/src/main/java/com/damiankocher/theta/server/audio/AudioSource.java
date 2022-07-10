@@ -12,7 +12,7 @@ public record AudioSource(
 
 	public static @NotNull JsonSerializer<AudioSource> createSerializer() {
 		return (audio, typeOfSrc, context) -> {
-			if(audio == null) {
+			if (audio == null) {
 				return null;
 			}
 

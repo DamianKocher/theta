@@ -11,7 +11,10 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class AudioManager {
 
@@ -27,7 +30,7 @@ public class AudioManager {
 	private final @NotNull Path cacheDirectory;
 
 	public AudioManager(final @NotNull Path cacheDirectory, final @NotNull Path textReplacementPath) throws IOException {
-		if(Files.exists(textReplacementPath)) {
+		if (Files.exists(textReplacementPath)) {
 			this.textReplacer = new Gson().fromJson(Files.newBufferedReader(textReplacementPath), TextReplacer.class);
 		} else {
 			this.textReplacer = new TextReplacer(Collections.emptyMap());
@@ -37,11 +40,23 @@ public class AudioManager {
 
 		this.cacheDirectory = cacheDirectory;
 
-		if(!Files.exists(cacheDirectory)) {
+		if (!Files.exists(cacheDirectory)) {
 			Files.createDirectories(cacheDirectory);
 		}
 
 		textReplacer.logReplacements();
+	}
+
+	@SuppressWarnings("UnstableApiUsage")
+	private static @NotNull String getName(final @NotNull String text, final @NotNull String languageCode, final @NotNull String voiceName, final double speakingRate) {
+		final var hasher = Hashing.sha256().newHasher();
+
+		hasher.putString(text, StandardCharsets.UTF_8);
+		hasher.putString(languageCode, StandardCharsets.UTF_8);
+		hasher.putString(voiceName, StandardCharsets.UTF_8);
+		hasher.putDouble(speakingRate);
+
+		return hasher.hash() + ".mp3";
 	}
 
 	public @NotNull AudioSource createAudioSource(@NotNull final String text) {
@@ -54,12 +69,12 @@ public class AudioManager {
 
 		final var shortText = text.substring(0, Math.min(text.length(), 40)) + (text.length() > 40 ? "..." : "");
 
-		if(audioSourceLookup.containsKey(name)) {
+		if (audioSourceLookup.containsKey(name)) {
 			log.info("returning existing audio source [name: {}, text: {}]", name, shortText);
 			return audioSourceLookup.get(name);
 		}
 
-		if(Files.exists(cacheDirectory.resolve(name))) {
+		if (Files.exists(cacheDirectory.resolve(name))) {
 			log.info("found cached audio [filename: {}, text: {}]", name, shortText);
 
 			try {
@@ -73,9 +88,9 @@ public class AudioManager {
 		try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()) {
 			final var input = SynthesisInput.newBuilder().setText(text).build();
 			final var voice = VoiceSelectionParams.newBuilder()
-							.setLanguageCode(languageCode)
-							.setName(voiceName)
-							.build();
+					.setLanguageCode(languageCode)
+					.setName(voiceName)
+					.build();
 			final var config = AudioConfig.newBuilder()
 					.setAudioEncoding(AudioEncoding.MP3)
 					.setSpeakingRate(speakingRate)
@@ -111,17 +126,5 @@ public class AudioManager {
 
 	public @NotNull Set<String> getAudioNames() {
 		return audioSourceLookup.keySet();
-	}
-
-	@SuppressWarnings("UnstableApiUsage")
-	private static @NotNull String getName(final @NotNull String text, final @NotNull String languageCode, final @NotNull String voiceName, final double speakingRate) {
-		final var hasher = Hashing.sha256().newHasher();
-
-		hasher.putString(text, StandardCharsets.UTF_8);
-		hasher.putString(languageCode, StandardCharsets.UTF_8);
-		hasher.putString(voiceName, StandardCharsets.UTF_8);
-		hasher.putDouble(speakingRate);
-
-		return hasher.hash() + ".mp3";
 	}
 }

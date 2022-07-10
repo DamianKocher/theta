@@ -24,6 +24,46 @@ public abstract class Section {
 		this.duration = duration;
 	}
 
+	public static @NotNull JsonSerializer<Section> createSerializer() {
+		return (section, typeOfSrc, context) -> {
+			if (section == null) {
+				return null;
+			}
+
+			final var jsonSection = context.serialize(section);
+
+			final var jsonSectionObject = jsonSection.getAsJsonObject();
+			JsonObject jsonMeta = new JsonObject();
+
+			addMetaString(jsonSectionObject, jsonMeta, "type", section.type);
+			addMetaBoolean(jsonSectionObject, jsonMeta, "useStandardContainer", section.useStandardContainer());
+			addMetaBoolean(jsonSectionObject, jsonMeta, "showPrevious", section.showPrevious());
+			addMetaBoolean(jsonSectionObject, jsonMeta, "showNext", section.showNext());
+			addMetaBoolean(jsonSectionObject, jsonMeta, "fadeIn", section.fadeIn());
+			addMetaBoolean(jsonSectionObject, jsonMeta, "fadeOut", section.fadeOut());
+			addMetaDouble(jsonSectionObject, jsonMeta, "duration", section.duration());
+
+			jsonSectionObject.add("_meta", jsonMeta);
+
+			return jsonSection;
+		};
+	}
+
+	private static void addMetaString(final @NotNull JsonObject jsonSection, final @NotNull JsonObject jsonMeta, final @NotNull String key, String value) {
+		jsonSection.remove(key);
+		jsonMeta.addProperty(key, value);
+	}
+
+	private static void addMetaBoolean(final @NotNull JsonObject jsonSection, final @NotNull JsonObject jsonMeta, final @NotNull String key, boolean value) {
+		jsonSection.remove(key);
+		jsonMeta.addProperty(key, value);
+	}
+
+	private static void addMetaDouble(final @NotNull JsonObject jsonSection, final @NotNull JsonObject jsonMeta, final @NotNull String key, double value) {
+		jsonSection.remove(key);
+		jsonMeta.addProperty(key, value);
+	}
+
 	public boolean useStandardContainer() {
 		return useStandardContainer;
 	}
@@ -70,45 +110,5 @@ public abstract class Section {
 
 	public void setDuration(double duration) {
 		this.duration = duration;
-	}
-
-	public static @NotNull JsonSerializer<Section> createSerializer() {
-		return (section, typeOfSrc, context) -> {
-			if(section == null) {
-				return null;
-			}
-
-			final var jsonSection = context.serialize(section);
-
-			final var jsonSectionObject = jsonSection.getAsJsonObject();
-			JsonObject jsonMeta = new JsonObject();
-
-			addMetaString(jsonSectionObject, jsonMeta, "type", section.type);
-			addMetaBoolean(jsonSectionObject, jsonMeta, "useStandardContainer", section.useStandardContainer());
-			addMetaBoolean(jsonSectionObject, jsonMeta, "showPrevious", section.showPrevious());
-			addMetaBoolean(jsonSectionObject, jsonMeta, "showNext", section.showNext());
-			addMetaBoolean(jsonSectionObject, jsonMeta, "fadeIn", section.fadeIn());
-			addMetaBoolean(jsonSectionObject, jsonMeta, "fadeOut", section.fadeOut());
-			addMetaDouble(jsonSectionObject, jsonMeta, "duration", section.duration());
-
-			jsonSectionObject.add("_meta", jsonMeta);
-
-			return jsonSection;
-		};
-	}
-
-	private static void addMetaString(final @NotNull JsonObject jsonSection, final @NotNull JsonObject jsonMeta, final @NotNull String key, String value) {
-		jsonSection.remove(key);
-		jsonMeta.addProperty(key, value);
-	}
-
-	private static void addMetaBoolean(final @NotNull JsonObject jsonSection, final @NotNull JsonObject jsonMeta, final @NotNull String key, boolean value) {
-		jsonSection.remove(key);
-		jsonMeta.addProperty(key, value);
-	}
-
-	private static void addMetaDouble(final @NotNull JsonObject jsonSection, final @NotNull JsonObject jsonMeta, final @NotNull String key, double value) {
-		jsonSection.remove(key);
-		jsonMeta.addProperty(key, value);
 	}
 }
