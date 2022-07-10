@@ -8,7 +8,7 @@
     "test": "eslint src --ext ts,tsx,js,jsx && tsc"
   },
   "repository": {},
-  "license": "GPL3",
+  "license": "AGPL-3.0",
   "dependencies": {
     "@remotion/cli": "^3.0.0",
     "@remotion/eslint-config": "^3.0.0",
