@@ -6,23 +6,33 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.file.Path;
 
 public record Config(
+		@NotNull Path scriptsDirectory,
 		@NotNull Path backgroundDirectory,
 		@NotNull Path audioCacheDirectory,
 		@NotNull Path textReplacementPath,
-		@NotNull Path scriptPath,
 		int port
 ) {
 
 	public static class Builder {
 
+		private @Nullable Path scriptsDirectory;
 		private @Nullable Path backgroundDirectory;
 		private @Nullable Path audioCacheDirectory;
 		private @Nullable Path textReplacementPath;
-		private @Nullable Path scriptPath;
 		private int port;
 
 		public Builder() {
 			this.port = Integer.MIN_VALUE;
+		}
+
+		public Path scriptsDirectory() {
+			return scriptsDirectory;
+		}
+
+		public Builder setScriptsDirectory(final @NotNull Path scriptsDirectory) {
+			this.scriptsDirectory = scriptsDirectory;
+
+			return this;
 		}
 
 		public Path backgroundDirectory() {
@@ -55,16 +65,6 @@ public record Config(
 			return this;
 		}
 
-		public Path scriptPath() {
-			return scriptPath;
-		}
-
-		public Builder setScriptPath(final @NotNull Path scriptPath) {
-			this.scriptPath = scriptPath;
-
-			return this;
-		}
-
 		public int port() {
 			return port;
 		}
@@ -76,6 +76,10 @@ public record Config(
 		}
 
 		public Config create() {
+			if(scriptsDirectory == null) {
+				throw new IllegalStateException("scriptsDirectory is null");
+			}
+
 			if (backgroundDirectory == null) {
 				throw new IllegalStateException("backgroundDirectory is null");
 			}
@@ -88,15 +92,11 @@ public record Config(
 				throw new IllegalStateException("textReplacementPath is null");
 			}
 
-			if (scriptPath == null) {
-				throw new IllegalStateException("scriptPath is null");
-			}
-
 			if (port == Integer.MIN_VALUE) {
 				throw new IllegalStateException("port is not set");
 			}
 
-			return new Config(backgroundDirectory, audioCacheDirectory, textReplacementPath, scriptPath, port);
+			return new Config(scriptsDirectory, backgroundDirectory, audioCacheDirectory, textReplacementPath, port);
 		}
 	}
 }

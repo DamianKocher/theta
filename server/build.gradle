@@ -3,7 +3,7 @@ plugins {
 }
 
 application {
-    mainClass = 'com.damiankocher.theta.server.Main'
+    mainClass = 'com.damiankocher.theta.server.Theta'
 }
 
 group 'com.damiankocher'

@@ -1,12 +1,9 @@
 package com.damiankocher.theta.server.content;
 
-import com.damiankocher.theta.server.Script;
 import com.damiankocher.theta.server.audio.AudioManager;
-import com.damiankocher.theta.server.audio.AudioSource;
 import com.damiankocher.theta.server.content.reddit.RedditComment;
 import com.damiankocher.theta.server.content.reddit.RedditTitleCard;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.damiankocher.theta.server.script.Script;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -41,13 +38,5 @@ public record Content(
 		}
 
 		return new Content(background, sections);
-	}
-
-	public static @NotNull Gson createJsonSerializer() {
-		return new GsonBuilder()
-				.registerTypeAdapter(Background.class, Background.createSerializer())
-				.registerTypeAdapter(Section.class, Section.createSerializer())
-				.registerTypeAdapter(AudioSource.class, AudioSource.createSerializer())
-				.create();
 	}
 }

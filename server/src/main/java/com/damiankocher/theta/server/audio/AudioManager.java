@@ -4,6 +4,7 @@ import com.google.cloud.texttospeech.v1.*;
 import com.google.common.hash.Hashing;
 import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -120,7 +121,7 @@ public class AudioManager {
 		return audioSource;
 	}
 
-	public @NotNull AudioSource getAudioSource(@NotNull String name) {
+	public @Nullable AudioSource getAudioSource(@NotNull String name) {
 		return audioSourceLookup.get(name);
 	}
 

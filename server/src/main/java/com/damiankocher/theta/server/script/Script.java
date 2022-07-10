@@ -1,4 +1,4 @@
-package com.damiankocher.theta.server;
+package com.damiankocher.theta.server.script;
 
 import org.jetbrains.annotations.NotNull;
 
