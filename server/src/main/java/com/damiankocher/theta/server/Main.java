@@ -19,11 +19,11 @@ public class Main {
 
 	private static final int SERVER_PORT = 5000;
 
-	public Main(final @NotNull Path scriptPath, final @NotNull Path audioCacheDirectory, final @NotNull Path textReplacementsPath, final @NotNull Path backgroundDirectory) throws IOException {
-		final var script = parseScript(scriptPath);
-		final var audioManager = new AudioManager(audioCacheDirectory, textReplacementsPath);
+	public Main(final @NotNull Config config) throws IOException {
+		final var script = parseScript(config.scriptPath());
+		final var audioManager = new AudioManager(config.audioCacheDirectory(), config.textReplacementPath());
 
-		final var content = Content.fromScript(script, audioManager, backgroundDirectory);
+		final var content = Content.fromScript(script, audioManager, config.backgroundDirectory());
 
 		log.info("starting server");
 		Javalin app = Javalin.create(JavalinConfig::enableCorsForAllOrigins).start(SERVER_PORT);
@@ -41,7 +41,15 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		final var dataPath = Path.of("data");
 
-		new Main(dataPath.resolve("script.json"), dataPath.resolve("cache"), dataPath.resolve("text-replacements.json"), dataPath.resolve("backgrounds"));
+		final var config = new Config.Builder()
+				.setBackgroundDirectory(dataPath.resolve("backgrounds"))
+				.setAudioCacheDirectory(dataPath.resolve("cache"))
+				.setTextReplacementPath(dataPath.resolve("text-replacements.json"))
+				.setScriptPath(dataPath.resolve("script.json"))
+				.setPort(5000)
+				.create();
+
+		new Main(config);
 	}
 
 	private @NotNull Script parseScript(final @NotNull Path scriptPath) throws IOException {
