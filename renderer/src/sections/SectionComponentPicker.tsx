@@ -1,4 +1,4 @@
-import { RedditTitlecard, Section } from "../Video";
+import { RedditTitlecard, Section } from "../Definitions";
 import { RedditCommentComponent } from "./RedditComment";
 import { RedditTitlecardComponent } from "./RedditTitlecard";
 

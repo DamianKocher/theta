@@ -1,65 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&display=swap');
+@import url('./reset.css');
 
-/* http://meyerweb.com/eric/tools/css/reset/ 
-   v2.0 | 20110126
-   License: none (public domain)
-*/
+:root {
+	--reddit-font: 'IBM Plex Sans', sans-serif;
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-	display: block;
-}
-body {
-	line-height: 1;
-}
-ol, ul {
-	list-style: none;
-}
-blockquote, q {
-	quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
-}
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
+	--reddit-font-title-size: 40px;
+	--reddit-font-title-weight: bold;
+
+	--reddit-font-normal-size: 32px;
+	--reddit-font-normal-weight: normal;
+
+	--reddit-font-subtext-size: 27px; 
+	--reddit-font-subtext-weight: thin;
+
+	--reddit-color-text: white;
+	--reddit-color-user: #04a5e5;
+	--reddit-color-subtext: #acb0be;
+
+	--reddit-container-background: black;
+	--reddit-container-width: 850px;
+	--reddit-container-padding: 42px;
+	--reddit-container-corner-roundness: 15px;
 }
 
 p, h1 {
   color: white;
-  font-family: 'IBM Plex Sans', sans-serif;
+  font-family: var(--reddit-font);
 }
 
 h1 {
-  font-size: 40px;
+	font-size: var(--reddit-font-title-size);
 }
 
 p {
-  font-size: 32px;
+  font-size: var(--reddit-font-normal-size);
 }
 
 .small {
@@ -69,12 +43,12 @@ p {
 }
 
 .user {
-  color: #04a5e5 !important;
+  color: var(--reddit-color-user) !important;
 }
 
 .box {
-  background: black;
-  width: 850px;
-  padding: 42px;
-	border-radius: 15px;
+  background: var(--reddit-container-background);
+  width: var(--reddit-container-width);
+  padding: var(--reddit-container-padding);
+	border-radius: var(--reddit-container-corner-roundness);
 }

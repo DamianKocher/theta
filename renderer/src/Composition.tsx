@@ -1,25 +1,25 @@
 import { Series, useVideoConfig } from "remotion";
 import { VideoBackgroundComponent } from "./background/VideoBackground";
 import { BoxComponent } from "./BoxComponent";
+import { Background, Content, RedditComment, RedditTitlecard } from "./Definitions";
 import { SectionComponentPicker } from "./sections/SectionComponentPicker";
 import './style/style.css';
-import { Content } from "./Video";
 
 export const Comp = (content: Content) => {
-	if (content === undefined) {
-		return (
-			<div></div>
-		)
-	}
+	// return an empty div if content is undefined. we'll get an undefined error if we don't do this
+	if (!content) return <div></div>
 
 	const { fps } = useVideoConfig();
 
+	const background: Background = content.background;
+	const sections: (RedditTitlecard | RedditComment)[] = content.sections;
+
 	return (
 		<div>
-			<VideoBackgroundComponent url={content.background.url} />
+			<VideoBackgroundComponent {...background} />
 
 			<Series>
-				{content.sections.map((section, index) => (
+				{sections.map((section, index) => (
 					<Series.Sequence
 						key={index}
 						durationInFrames={Math.ceil(section._meta.duration * fps)}
@@ -27,7 +27,7 @@ export const Comp = (content: Content) => {
 						layout={'absolute-fill'}
 					>
 						{section._meta.useStandardContainer ?
-							<BoxComponent sections={content.sections} index={index} /> :
+							<BoxComponent sections={sections} index={index} /> :
 							<SectionComponentPicker section={section} isPrimary={true} />}
 					</Series.Sequence>
 				))}

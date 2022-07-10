@@ -1,5 +1,5 @@
 import { Audio } from "remotion";
-import { RedditTitlecard } from "../Video";
+import { RedditTitlecard } from "../Definitions";
 import redditLogo from "./reddit_logo.png";
 
 interface Props {

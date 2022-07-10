@@ -2,50 +2,13 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Composition, continueRender, delayRender } from 'remotion';
 import { Comp } from './Composition';
+import { Content } from './Definitions';
 
 const FPS = 30;
 
-export interface Content {
-	background: Background;
-	sections: (RedditComment | RedditTitlecard)[]
-}
-
-export interface Background {
-	url: string;
-}
-
-export interface Section {
-	_meta: {
-		type: string;
-		useStandardContainer: boolean;
-		showPrevious: boolean;
-		showNext: boolean;
-		fadeIn: boolean;
-		fadeOut: boolean;
-		duration: number;
-	}
-}
-
-export interface Audio {
-	url: string;
-}
-
-export interface RedditTitlecard extends Section {
-	subreddit: string;
-	username: string;
-	text: string;
-	audio: Audio;
-	timestamp: string;
-}
-
-export interface RedditComment extends Section {
-	text: string;
-	audio: Audio;
-}
-
 const instance = axios.create({
-  baseURL: 'http://localhost:5000',
-  timeout: 1000,
+	baseURL: 'http://localhost:5000',
+	timeout: 1000,
 });
 
 export const Index: React.FC = () => {

@@ -1,6 +1,6 @@
 import { AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
+import { Section } from "./Definitions";
 import { SectionComponentPicker } from "./sections/SectionComponentPicker";
-import { Section } from "./Video";
 
 interface Props {
   sections: Section[];
@@ -40,7 +40,6 @@ export const BoxComponent = (props: Props) => {
           <div style={{ opacity: 1 / 3 }}>
             <SectionComponentPicker section={props.sections[index - 1]} isPrimary={false} />
           </div>
-
         }
 
         <SectionComponentPicker section={section} isPrimary={true} />

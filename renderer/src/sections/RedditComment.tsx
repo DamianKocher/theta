@@ -1,5 +1,5 @@
 import { Audio } from "remotion";
-import { RedditComment } from "../Video";
+import { RedditComment } from "../Definitions";
 
 
 interface Props {
@@ -28,7 +28,7 @@ export const RedditCommentComponent = (props: Props) => {
           gap: '1.5em',
         }}
       >
-        {redditComment.text.split('\n').map((line, index) => (
+        {redditComment.text.split('\n').map((line: string, index: number) => (
           <p key={index}>{line}</p>
         ))}
       </div>
