@@ -47,8 +47,8 @@ p {
 }
 
 .box {
-  background: var(--reddit-container-background);
-  width: var(--reddit-container-width);
-  padding: var(--reddit-container-padding);
+	background: var(--reddit-container-background);
+	width: var(--reddit-container-width);
+	padding: var(--reddit-container-padding);
 	border-radius: var(--reddit-container-corner-roundness);
 }
