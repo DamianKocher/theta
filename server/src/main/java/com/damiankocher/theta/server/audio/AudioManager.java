@@ -1,5 +1,6 @@
 package com.damiankocher.theta.server.audio;
 
+import com.damiankocher.theta.server.Theta;
 import com.google.cloud.texttospeech.v1.*;
 import com.google.common.hash.Hashing;
 import com.google.gson.Gson;
@@ -25,24 +26,29 @@ public class AudioManager {
 	private static final @NotNull String DEFAULT_VOICE_NAME = "en-US-Wavenet-H";
 	private static final double DEFAULT_SPEAKING_RATE = 1.2d;
 
+	private final @NotNull Theta theta;
+
 	private final @NotNull TextReplacer textReplacer;
 
 	private final @NotNull Map<String, AudioSource> audioSourceLookup = new HashMap<>();
-	private final @NotNull Path cacheDirectory;
 
-	public AudioManager(final @NotNull Path cacheDirectory, final @NotNull Path textReplacementPath) throws IOException {
+	public AudioManager(final @NotNull Theta theta) throws IOException {
+		this.theta = theta;
+
+		final var config = theta.config();
+
+		final var textReplacementPath = config.textReplacementPath();
+		final var audioCahceDirectory = config.audioCacheDirectory();
+
 		if (Files.exists(textReplacementPath)) {
 			this.textReplacer = new Gson().fromJson(Files.newBufferedReader(textReplacementPath), TextReplacer.class);
 		} else {
 			this.textReplacer = new TextReplacer(Collections.emptyMap());
-
 			log.warn("text replacement file not found, using empty text replacer");
 		}
 
-		this.cacheDirectory = cacheDirectory;
-
-		if (!Files.exists(cacheDirectory)) {
-			Files.createDirectories(cacheDirectory);
+		if (!Files.exists(audioCahceDirectory)) {
+			Files.createDirectories(audioCahceDirectory);
 		}
 
 		textReplacer.logReplacements();
@@ -75,11 +81,12 @@ public class AudioManager {
 			return audioSourceLookup.get(name);
 		}
 
-		if (Files.exists(cacheDirectory.resolve(name))) {
+		Path audioCacheDirectory = theta.config().audioCacheDirectory();
+		if (Files.exists(audioCacheDirectory.resolve(name))) {
 			log.info("found cached audio [filename: {}, text: {}]", name, shortText);
 
 			try {
-				return createAudioSourceObject(name, Files.readAllBytes(cacheDirectory.resolve(name)));
+				return createAudioSourceObject(name, Files.readAllBytes(audioCacheDirectory.resolve(name)));
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
@@ -103,7 +110,7 @@ public class AudioManager {
 
 			log.info("generated audio [language code: {}, voice name: {}, speaking rate: {}, hashed name: {}, text: {}]", languageCode, voiceName, speakingRate, name, shortText);
 
-			Files.write(cacheDirectory.resolve(name), data);
+			Files.write(audioCacheDirectory.resolve(name), data);
 			return createAudioSourceObject(name, data);
 		} catch (IOException e) {
 			throw new RuntimeException(e);

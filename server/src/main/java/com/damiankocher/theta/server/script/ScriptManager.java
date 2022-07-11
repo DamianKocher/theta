@@ -1,5 +1,6 @@
 package com.damiankocher.theta.server.script;
 
+import com.damiankocher.theta.server.Theta;
 import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -11,23 +12,25 @@ import java.nio.file.Path;
 import java.util.*;
 
 public class ScriptManager {
-	
+
 	private static final @NotNull Logger log = LoggerFactory.getLogger(ScriptManager.class);
 
+	private final @NotNull Theta theta;
+
 	private final @NotNull Set<String> invalidScripts = new HashSet<>();
-	private final @NotNull Map<String, Script> validScripts = new HashMap<>();
+	private final @NotNull Map<String, ContentGenerator> validScripts = new HashMap<>();
 
-	private final @NotNull Path scriptDirectory;
-
-	public ScriptManager(final @NotNull Path scriptsDirectory) {
-		this.scriptDirectory = scriptsDirectory;
+	public ScriptManager(final @NotNull Theta theta) {
+		this.theta = theta;
 	}
 
 	public void loadScripts() throws IOException {
 		invalidScripts.clear();
 		validScripts.clear();
 
-		try (final var stream = Files.walk(scriptDirectory)) {
+		final var scriptsDirectory = theta.config().scriptsDirectory();
+
+		try (final var stream = Files.walk(scriptsDirectory)) {
 			stream.filter(Files::isRegularFile).forEach(this::loadScript);
 		}
 	}
@@ -38,7 +41,7 @@ public class ScriptManager {
 		try (final var bufferedReader = Files.newBufferedReader(path)) {
 			final var gson = new Gson();
 
-			final var script = gson.fromJson(bufferedReader, Script.class);
+			final var script = gson.fromJson(bufferedReader, ContentGenerator.class);
 			validScripts.put(scriptName, script);
 		} catch (Exception e) {
 			log.warn("Failed to load script from path: {}", path, e);
@@ -54,7 +57,7 @@ public class ScriptManager {
 		return validScripts.keySet();
 	}
 
-	public Script getScript(String name) {
+	public ContentGenerator getScript(String name) {
 		return validScripts.get(name);
 	}
 }

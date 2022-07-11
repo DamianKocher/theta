@@ -76,7 +76,7 @@ public record Config(
 		}
 
 		public Config create() {
-			if(scriptsDirectory == null) {
+			if (scriptsDirectory == null) {
 				throw new IllegalStateException("scriptsDirectory is null");
 			}
 

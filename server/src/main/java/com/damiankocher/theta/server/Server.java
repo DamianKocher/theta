@@ -1,9 +1,6 @@
 package com.damiankocher.theta.server;
 
-import com.damiankocher.theta.server.audio.AudioManager;
 import com.damiankocher.theta.server.audio.AudioSource;
-import com.damiankocher.theta.server.content.Background;
-import com.damiankocher.theta.server.content.ContentManager;
 import com.damiankocher.theta.server.content.Section;
 import com.damiankocher.theta.server.script.ScriptManager;
 import com.google.gson.Gson;
@@ -22,21 +19,17 @@ public class Server {
 
 	private static final @NotNull Logger log = LoggerFactory.getLogger(Server.class);
 
-	private final @NotNull ScriptManager scriptManager;
-	private final @NotNull ContentManager contentManager;
-	private final @NotNull AudioManager audioManager;
+	private final @NotNull Theta theta;
 
 	private final @NotNull Javalin app;
 	private final @NotNull Gson gson;
 
 	private boolean running;
 
-	public Server(@NotNull ScriptManager scriptManager, final @NotNull ContentManager contentManager, final @NotNull AudioManager audioManager) {
-		this.scriptManager = scriptManager;
-		this.contentManager = contentManager;
-		this.audioManager = audioManager;
-		this.gson = createGsonInstance();
+	public Server(final @NotNull Theta theta) {
+		this.theta = theta;
 
+		this.gson = createGsonInstance();
 		this.app = Javalin.create(JavalinConfig::enableCorsForAllOrigins);
 
 		registerBackgroundHandler();
@@ -50,22 +43,23 @@ public class Server {
 
 	private static Gson createGsonInstance() {
 		return new GsonBuilder()
-				.registerTypeAdapter(Background.class, Background.createSerializer())
 				.registerTypeAdapter(Section.class, Section.createSerializer())
 				.registerTypeAdapter(AudioSource.class, AudioSource.createSerializer())
 				.create();
 	}
 
-	public void start(final int port) {
-		if(running) throw new IllegalStateException("server is already running");
+	public void start() {
+		if (running) throw new IllegalStateException("server is already running");
 		running = true;
 
 		log.info("starting server");
+
+		final var port = theta.config().port();
 		app.start(port);
 	}
 
 	public void stop() {
-		if(!running) throw new IllegalStateException("server is not running");
+		if (!running) throw new IllegalStateException("server is not running");
 		running = false;
 
 		app.stop();
@@ -84,8 +78,9 @@ public class Server {
 		app.get("/audio/{id}", ctx -> {
 			final var id = ctx.pathParam("id");
 
+			final var audioManager = theta.audioManager();
 			final var audioSource = audioManager.getAudioSource(id);
-			if(audioSource == null) {
+			if (audioSource == null) {
 				ctx.status(404).result(new byte[0]);
 				return;
 			}
@@ -100,9 +95,11 @@ public class Server {
 		app.get("/content/{id}", ctx -> {
 			final var id = ctx.pathParam("id");
 
+			final var contentManager = theta.contentManager();
 			final var content = contentManager.getContent(id);
-			if(content == null) {
-				ctx.status(404);
+			if (content == null) {
+				ctx.status(404).result(new byte[0]);
+				return;
 			}
 
 			final var result = gson.toJson(content);
@@ -113,6 +110,8 @@ public class Server {
 
 	private void registerScriptHandler() {
 		app.get("scripts", ctx -> {
+			ScriptManager scriptManager = theta.scriptManager();
+
 			final JsonObject jsonResponse = new JsonObject();
 
 			jsonResponse.add("invalid", createJsonArrayFromSet(scriptManager.invalidScriptNames()));

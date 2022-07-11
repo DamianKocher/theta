@@ -2,28 +2,29 @@ package com.damiankocher.theta.server;
 
 import com.damiankocher.theta.server.audio.AudioManager;
 import com.damiankocher.theta.server.content.ContentManager;
-import com.damiankocher.theta.server.script.Script;
 import com.damiankocher.theta.server.script.ScriptManager;
-import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class Theta {
 
+	private final @NotNull Config config;
+
+	private final @NotNull ScriptManager scriptManager;
+	private final @NotNull ContentManager contentManager;
+	private final @NotNull AudioManager audioManager;
+	private final @NotNull Server server;
+
 	public Theta(final @NotNull Config config) throws IOException {
-//		final var script = parseScript(config.scriptsDirectory());
+		this.config = config;
 
-		final var scriptManager = new ScriptManager(config.scriptsDirectory());
-		final var audioManager = new AudioManager(config.audioCacheDirectory(), config.textReplacementPath());
-		final var contentManager = new ContentManager();
-		final var server = new Server(scriptManager, contentManager, audioManager);
+		this.scriptManager = new ScriptManager(this);
+		this.audioManager = new AudioManager(this);
+		this.contentManager = new ContentManager(this);
 
-//		final var content = Content.fromScript(script, audioManager, config.backgroundDirectory());
-
-		server.start(config.port());
+		this.server = new Server(this);
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -37,11 +38,27 @@ public class Theta {
 				.setPort(5000)
 				.create();
 
-		new Theta(config);
+		Theta instance = new Theta(config);
+		instance.server().start();
 	}
 
-	private @NotNull Script parseScript(final @NotNull Path scriptPath) throws IOException {
-		final var reader = Files.newBufferedReader(scriptPath);
-		return new Gson().fromJson(reader, Script.class);
+	public Config config() {
+		return config;
+	}
+
+	public ScriptManager scriptManager() {
+		return scriptManager;
+	}
+
+	public ContentManager contentManager() {
+		return contentManager;
+	}
+
+	public AudioManager audioManager() {
+		return audioManager;
+	}
+
+	public Server server() {
+		return server;
 	}
 }
