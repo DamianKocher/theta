@@ -6,6 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 public interface ContentGenerator {
 
-	@NotNull Content createContent(final @NotNull Theta theta);
+    @NotNull Content createContent(final @NotNull Theta theta);
 
 }

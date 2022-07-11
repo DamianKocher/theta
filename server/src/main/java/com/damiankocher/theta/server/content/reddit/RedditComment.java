@@ -8,31 +8,31 @@ import org.jetbrains.annotations.Nullable;
 
 public class RedditComment extends Section {
 
-	private @NotNull String text = "";
-	private @Nullable AudioSource audio;
+    private @NotNull String text = "";
+    private @Nullable AudioSource audio;
 
-	public RedditComment() {
-		super("reddit_comment", true, false, false, true, true, 0);
-	}
+    public RedditComment() {
+        super("reddit_comment", true, false, false, true, true, 0);
+    }
 
-	public RedditComment(final @NotNull AudioManager audioManager, final @NotNull String text) {
-		this();
+    public RedditComment(final @NotNull AudioManager audioManager, final @NotNull String text) {
+        this();
 
-		setText(audioManager, text);
-	}
+        setText(audioManager, text);
+    }
 
-	public void setText(final @NotNull AudioManager audioManager, final @NotNull String text) {
-		this.text = text;
-		this.audio = audioManager.createAudioSource(text);
+    public void setText(final @NotNull AudioManager audioManager, final @NotNull String text) {
+        this.text = text;
+        this.audio = audioManager.createAudioSource(text);
 
-		setDuration(audio.duration());
-	}
+        setDuration(audio.duration());
+    }
 
-	public @NotNull String text() {
-		return text;
-	}
+    public @NotNull String text() {
+        return text;
+    }
 
-	public @Nullable AudioSource audio() {
-		return audio;
-	}
+    public @Nullable AudioSource audio() {
+        return audio;
+    }
 }

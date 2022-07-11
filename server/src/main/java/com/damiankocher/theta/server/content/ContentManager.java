@@ -6,13 +6,13 @@ import org.jetbrains.annotations.Nullable;
 
 public class ContentManager {
 
-	private final @NotNull Theta theta;
+    private final @NotNull Theta theta;
 
-	public ContentManager(final @NotNull Theta theta) {
-		this.theta = theta;
-	}
+    public ContentManager(final @NotNull Theta theta) {
+        this.theta = theta;
+    }
 
-	public @Nullable Content getContent(final @NotNull String id) {
-		return null;
-	}
+    public @Nullable Content getContent(final @NotNull String id) {
+        return null;
+    }
 }

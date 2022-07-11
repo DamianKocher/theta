@@ -17,115 +17,115 @@ import java.util.Set;
 
 public class Server {
 
-	private static final @NotNull Logger log = LoggerFactory.getLogger(Server.class);
+    private static final @NotNull Logger log = LoggerFactory.getLogger(Server.class);
 
-	private final @NotNull Theta theta;
+    private final @NotNull Theta theta;
 
-	private final @NotNull Javalin app;
-	private final @NotNull Gson gson;
+    private final @NotNull Javalin app;
+    private final @NotNull Gson gson;
 
-	private boolean running;
+    private boolean running;
 
-	public Server(final @NotNull Theta theta) {
-		this.theta = theta;
+    public Server(final @NotNull Theta theta) {
+        this.theta = theta;
 
-		this.gson = createGsonInstance();
-		this.app = Javalin.create(JavalinConfig::enableCorsForAllOrigins);
+        this.gson = createGsonInstance();
+        this.app = Javalin.create(JavalinConfig::enableCorsForAllOrigins);
 
-		registerBackgroundHandler();
-		registerAudioHandler();
-		registerContentHandler();
+        registerBackgroundHandler();
+        registerAudioHandler();
+        registerContentHandler();
 
-		registerScriptHandler();
+        registerScriptHandler();
 
-		app.get("/*", ctx -> ctx.result("hey :)"));
-	}
+        app.get("/*", ctx -> ctx.result("hey :)"));
+    }
 
-	private static Gson createGsonInstance() {
-		return new GsonBuilder()
-				.registerTypeAdapter(Section.class, Section.createSerializer())
-				.registerTypeAdapter(AudioSource.class, AudioSource.createSerializer())
-				.create();
-	}
+    private static Gson createGsonInstance() {
+        return new GsonBuilder()
+                .registerTypeAdapter(Section.class, Section.createSerializer())
+                .registerTypeAdapter(AudioSource.class, AudioSource.createSerializer())
+                .create();
+    }
 
-	public void start() {
-		if (running) throw new IllegalStateException("server is already running");
-		running = true;
+    public void start() {
+        if (running) throw new IllegalStateException("server is already running");
+        running = true;
 
-		log.info("starting server");
+        log.info("starting server");
 
-		final var port = theta.config().port();
-		app.start(port);
-	}
+        final var port = theta.config().port();
+        app.start(port);
+    }
 
-	public void stop() {
-		if (!running) throw new IllegalStateException("server is not running");
-		running = false;
+    public void stop() {
+        if (!running) throw new IllegalStateException("server is not running");
+        running = false;
 
-		app.stop();
-	}
+        app.stop();
+    }
 
-	private void registerBackgroundHandler() {
-		app.get("/bg/{id}", ctx -> {
-			final var id = ctx.pathParam("id");
+    private void registerBackgroundHandler() {
+        app.get("/bg/{id}", ctx -> {
+            final var id = ctx.pathParam("id");
 
-			// TODO:
-			ctx.contentType("video/mp4").result(new byte[0]);
-		});
-	}
+            // TODO:
+            ctx.contentType("video/mp4").result(new byte[0]);
+        });
+    }
 
-	private void registerAudioHandler() {
-		app.get("/audio/{id}", ctx -> {
-			final var id = ctx.pathParam("id");
+    private void registerAudioHandler() {
+        app.get("/audio/{id}", ctx -> {
+            final var id = ctx.pathParam("id");
 
-			final var audioManager = theta.audioManager();
-			final var audioSource = audioManager.getAudioSource(id);
-			if (audioSource == null) {
-				ctx.status(404).result(new byte[0]);
-				return;
-			}
+            final var audioManager = theta.audioManager();
+            final var audioSource = audioManager.getAudioSource(id);
+            if (audioSource == null) {
+                ctx.status(404).result(new byte[0]);
+                return;
+            }
 
-			final var result = audioSource.data();
+            final var result = audioSource.data();
 
-			ctx.contentType("audio/mpeg").result(result);
-		});
-	}
+            ctx.contentType("audio/mpeg").result(result);
+        });
+    }
 
-	private void registerContentHandler() {
-		app.get("/content/{id}", ctx -> {
-			final var id = ctx.pathParam("id");
+    private void registerContentHandler() {
+        app.get("/content/{id}", ctx -> {
+            final var id = ctx.pathParam("id");
 
-			final var contentManager = theta.contentManager();
-			final var content = contentManager.getContent(id);
-			if (content == null) {
-				ctx.status(404).result(new byte[0]);
-				return;
-			}
+            final var contentManager = theta.contentManager();
+            final var content = contentManager.getContent(id);
+            if (content == null) {
+                ctx.status(404).result(new byte[0]);
+                return;
+            }
 
-			final var result = gson.toJson(content);
+            final var result = gson.toJson(content);
 
-			ctx.contentType("application/json").result(result);
-		});
-	}
+            ctx.contentType("application/json").result(result);
+        });
+    }
 
-	private void registerScriptHandler() {
-		app.get("scripts", ctx -> {
-			ScriptManager scriptManager = theta.scriptManager();
+    private void registerScriptHandler() {
+        app.get("scripts", ctx -> {
+            ScriptManager scriptManager = theta.scriptManager();
 
-			final JsonObject jsonResponse = new JsonObject();
+            final JsonObject jsonResponse = new JsonObject();
 
-			jsonResponse.add("invalid", createJsonArrayFromSet(scriptManager.invalidScriptNames()));
-			jsonResponse.add("valid", createJsonArrayFromSet(scriptManager.validScriptNames()));
+            jsonResponse.add("invalid", createJsonArrayFromSet(scriptManager.invalidScriptNames()));
+            jsonResponse.add("valid", createJsonArrayFromSet(scriptManager.validScriptNames()));
 
-			ctx.contentType("application/json").result(jsonResponse.toString());
-		});
-	}
+            ctx.contentType("application/json").result(jsonResponse.toString());
+        });
+    }
 
-	private JsonArray createJsonArrayFromSet(final @NotNull Set<String> set) {
-		final var jsonArray = new JsonArray();
-		for (final var element : set) {
-			jsonArray.add(element);
-		}
-		return jsonArray;
-	}
+    private JsonArray createJsonArrayFromSet(final @NotNull Set<String> set) {
+        final var jsonArray = new JsonArray();
+        for (final var element : set) {
+            jsonArray.add(element);
+        }
+        return jsonArray;
+    }
 }
