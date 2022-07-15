@@ -60,7 +60,7 @@ export default defineComponent({
   align-items: center;
 
   color: var(--ctp-peach);
-  text-transform: uppercase;
+  text-transform: var(--text-transform);
   font-size: var(--text-size-label);
 }
 

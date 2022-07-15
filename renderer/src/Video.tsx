@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { Composition, continueRender, delayRender } from 'remotion';
-import { Comp } from './Composition';
-import { Content } from './Definitions';
+import {useEffect, useState} from 'react';
+import {Composition, continueRender, delayRender} from 'remotion';
+import {Comp} from './Composition';
+import {Content} from './Definitions';
 
 const FPS = 30;
 
@@ -19,31 +19,38 @@ export const Index: React.FC = () => {
 	useEffect(() => {
 		(async () => {
 			console.log('getting content');
-			const con: Content = (await instance.get('/content')).data;
+			const con: Content = (await instance.get('/video/video')).data;
 
 			let _durationInFrames = 0;
-			con.sections.forEach((section) => _durationInFrames += Math.ceil(section._meta.duration * FPS)); // this should probably use .reduce()
-			console.log(`composition is ${_durationInFrames / FPS} seconds long at ${FPS} fps which is a total of ${_durationInFrames} frames`)
+			con.sections.forEach(
+				(section) =>
+					(_durationInFrames += Math.ceil(section._meta.duration * FPS))
+			); // this should probably use .reduce()
+			console.log(
+				`composition is ${
+					_durationInFrames / FPS
+				} seconds long at ${FPS} fps which is a total of ${_durationInFrames} frames`
+			);
 
 			setDurationInFrames(_durationInFrames);
 			setContent(con);
 
-			console.log('continueRender()')
+			console.log('continueRender()');
 			continueRender(handle);
 		})();
 	}, [handle]);
 
-	return (
-		content !== undefined ?
-			<Composition
-				id="RedditTTS"
-				component={Comp}
-				defaultProps={content}
-				durationInFrames={durationInFrames}
-				fps={FPS}
-				width={1080}
-				height={1920}
-			/>
-			: <div />
+	return content !== undefined ? (
+		<Composition
+			id="RedditTTS"
+			component={Comp}
+			defaultProps={content}
+			durationInFrames={durationInFrames}
+			fps={FPS}
+			width={1080}
+			height={1920}
+		/>
+	) : (
+		<div />
 	);
 };

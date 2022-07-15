@@ -1,8 +1,8 @@
-package com.damiankocher.theta.server.content.reddit;
+package com.damiankocher.theta.server.video.reddit;
 
 import com.damiankocher.theta.server.audio.AudioManager;
 import com.damiankocher.theta.server.audio.AudioSource;
-import com.damiankocher.theta.server.content.Section;
+import com.damiankocher.theta.server.video.Section;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

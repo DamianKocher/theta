@@ -64,6 +64,6 @@ export default defineComponent({
   color: var(--ctp-lavender);
   font-size: var(--text-size-header);
   text-align: center;
-  text-transform: uppercase;
+  text-transform: var(--text-transform);
 }
 </style>

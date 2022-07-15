@@ -47,6 +47,8 @@
     calc(100% - calc(var(--padding-view) * 2)),
     var(--view-width-max)
   );
+
+  --text-transform: uppercase;
 }
 
 * {

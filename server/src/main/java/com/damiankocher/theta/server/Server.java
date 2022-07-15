@@ -1,10 +1,5 @@
 package com.damiankocher.theta.server;
 
-import com.damiankocher.theta.server.audio.AudioSource;
-import com.damiankocher.theta.server.content.Section;
-import com.damiankocher.theta.server.script.ScriptManager;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.javalin.Javalin;
@@ -13,6 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Collections;
 import java.util.Set;
 
 public class Server {
@@ -22,30 +20,18 @@ public class Server {
     private final @NotNull Theta theta;
 
     private final @NotNull Javalin app;
-    private final @NotNull Gson gson;
 
     private boolean running;
 
     public Server(final @NotNull Theta theta) {
         this.theta = theta;
-
-        this.gson = createGsonInstance();
         this.app = Javalin.create(JavalinConfig::enableCorsForAllOrigins);
 
         registerBackgroundHandler();
         registerAudioHandler();
-        registerContentHandler();
-
-        registerScriptHandler();
+        registerVideoHandler();
 
         app.get("/*", ctx -> ctx.result("hey :)"));
-    }
-
-    private static Gson createGsonInstance() {
-        return new GsonBuilder()
-                .registerTypeAdapter(Section.class, Section.createSerializer())
-                .registerTypeAdapter(AudioSource.class, AudioSource.createSerializer())
-                .create();
     }
 
     public void start() {
@@ -69,8 +55,10 @@ public class Server {
         app.get("/bg/{id}", ctx -> {
             final var id = ctx.pathParam("id");
 
-            // TODO:
-            ctx.contentType("video/mp4").result(new byte[0]);
+            final var path = theta.config().backgroundDirectory().resolve(id);
+            final var bytes = Files.readAllBytes(path);
+
+            ctx.contentType("video/mp4").result(bytes);
         });
     }
 
@@ -91,33 +79,33 @@ public class Server {
         });
     }
 
-    private void registerContentHandler() {
-        app.get("/content/{id}", ctx -> {
+    private void registerVideoHandler() {
+        app.get("/video/{id}", ctx -> {
             final var id = ctx.pathParam("id");
 
-            final var contentManager = theta.contentManager();
-            final var content = contentManager.getContent(id);
+            final var contentManager = theta.videoManager();
+            final var content = contentManager.getVideo(id);
             if (content == null) {
                 ctx.status(404).result(new byte[0]);
                 return;
             }
 
+            final var gson = theta.gson();
             final var result = gson.toJson(content);
 
             ctx.contentType("application/json").result(result);
         });
-    }
 
-    private void registerScriptHandler() {
-        app.get("scripts", ctx -> {
-            ScriptManager scriptManager = theta.scriptManager();
+        app.get("/videos", ctx -> {
+            final var videoManager = theta.videoManager();
+            final var videos = videoManager.videoIds();
 
-            final JsonObject jsonResponse = new JsonObject();
+            final var response = new JsonObject();
 
-            jsonResponse.add("invalid", createJsonArrayFromSet(scriptManager.invalidScriptNames()));
-            jsonResponse.add("valid", createJsonArrayFromSet(scriptManager.validScriptNames()));
+            response.add("validIds", createJsonArrayFromSet(videos));
+            response.add("invalidIds", createJsonArrayFromSet(Collections.emptySet()));
 
-            ctx.contentType("application/json").result(jsonResponse.toString());
+            ctx.contentType("application/json").result(response.toString());
         });
     }
 

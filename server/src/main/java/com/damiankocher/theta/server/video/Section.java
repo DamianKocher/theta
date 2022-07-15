@@ -1,4 +1,4 @@
-package com.damiankocher.theta.server.content;
+package com.damiankocher.theta.server.video;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializer;

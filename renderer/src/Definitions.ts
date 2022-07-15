@@ -1,10 +1,6 @@
 export interface Content {
-	background: Background;
-	sections: (RedditComment | RedditTitlecard)[]
-}
-
-export interface Background {
-	url: string;
+	background: string;
+	sections: Section[];
 }
 
 export interface Audio {
@@ -20,7 +16,7 @@ export interface Section {
 		fadeIn: boolean;
 		fadeOut: boolean;
 		duration: number;
-	}
+	};
 }
 
 export interface RedditTitlecard extends Section {

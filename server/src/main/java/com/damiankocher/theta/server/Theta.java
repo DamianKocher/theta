@@ -1,30 +1,62 @@
 package com.damiankocher.theta.server;
 
 import com.damiankocher.theta.server.audio.AudioManager;
-import com.damiankocher.theta.server.content.ContentManager;
-import com.damiankocher.theta.server.script.ScriptManager;
+import com.damiankocher.theta.server.audio.AudioSource;
+import com.damiankocher.theta.server.video.Section;
+import com.damiankocher.theta.server.video.Video;
+import com.damiankocher.theta.server.video.VideoManager;
+import com.damiankocher.theta.server.video.reddit.RedditComment;
+import com.damiankocher.theta.server.video.reddit.RedditTitleCard;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class Theta {
 
     private final @NotNull Config config;
 
-    private final @NotNull ScriptManager scriptManager;
-    private final @NotNull ContentManager contentManager;
+    private final @NotNull Gson gson;
+    private final @NotNull VideoManager videoManager;
     private final @NotNull AudioManager audioManager;
     private final @NotNull Server server;
 
     public Theta(final @NotNull Config config) throws IOException {
         this.config = config;
 
-        this.scriptManager = new ScriptManager(this);
+        this.gson = createGsonInstance();
         this.audioManager = new AudioManager(this);
-        this.contentManager = new ContentManager(this);
+        this.videoManager = new VideoManager(this);
 
         this.server = new Server(this);
+
+        final var script = gson().fromJson(Files.newBufferedReader(config.scriptsDirectory().resolve("ask_reddit_cult.json")), Script.class);
+        final var video = new Video("bg_pk.mp4");
+
+        final var titlecard = new RedditTitleCard();
+        titlecard.setSubreddit(script.subreddit);
+        titlecard.setTimestamp(script.time);
+        titlecard.setUsername(script.username);
+        titlecard.setText(audioManager, script.text);
+        video.addSection(titlecard);
+
+        for (String sectionText : script.sections) {
+            final var section = new RedditComment();
+            section.setText(audioManager, sectionText);
+            video.addSection(section);
+        }
+
+        videoManager.addVideo("video", video);
+    }
+
+    private static Gson createGsonInstance() {
+        return new GsonBuilder()
+                .registerTypeAdapter(Section.class, Section.createSerializer())
+                .registerTypeAdapter(AudioSource.class, AudioSource.createSerializer())
+                .create();
     }
 
     public static void main(String[] args) throws IOException {
@@ -46,12 +78,12 @@ public class Theta {
         return config;
     }
 
-    public ScriptManager scriptManager() {
-        return scriptManager;
+    public Gson gson() {
+        return gson;
     }
 
-    public ContentManager contentManager() {
-        return contentManager;
+    public VideoManager videoManager() {
+        return videoManager;
     }
 
     public AudioManager audioManager() {
