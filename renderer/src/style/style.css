@@ -4,14 +4,14 @@
 :root {
 	--reddit-font: 'IBM Plex Sans', sans-serif;
 
-	--reddit-font-title-size: 40px;
+	--reddit-font-title-size: 42px;
 	--reddit-font-title-weight: bold;
 
-	--reddit-font-normal-size: 32px;
+	--reddit-font-normal-size: 36px;
 	--reddit-font-normal-weight: normal;
 
-	--reddit-font-subtext-size: 27px; 
-	--reddit-font-subtext-weight: thin;
+	--reddit-font-subtext-size: 32px;
+	--reddit-font-subtext-weight: 400;
 
 	--reddit-color-text: white;
 	--reddit-color-user: #04a5e5;
@@ -23,9 +23,10 @@
 	--reddit-container-corner-roundness: 15px;
 }
 
-p, h1 {
-  color: white;
-  font-family: var(--reddit-font);
+p,
+h1 {
+	color: white;
+	font-family: var(--reddit-font);
 }
 
 h1 {
@@ -33,17 +34,17 @@ h1 {
 }
 
 p {
-  font-size: var(--reddit-font-normal-size);
+	font-size: var(--reddit-font-normal-size);
 }
 
 .small {
-  font-size: 27px;
-  color: #acb0be;
-  font-weight: thin;
+	font-size: 27px;
+	color: #acb0be;
+	font-weight: var(--reddit-font-subtext-weight);
 }
 
 .user {
-  color: var(--reddit-color-user) !important;
+	color: var(--reddit-color-user) !important;
 }
 
 .box {

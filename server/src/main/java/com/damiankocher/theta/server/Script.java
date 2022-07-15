@@ -12,6 +12,13 @@ public class Script {
     public String time;
     public String text;
 
-    public List<String> sections;
+    public List<Comment> comments;
 
+    public static class Comment {
+        public int commentDepth;
+        public String username;
+        public String time;
+
+        public List<String> sections;
+    }
 }

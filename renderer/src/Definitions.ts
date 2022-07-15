@@ -28,6 +28,14 @@ export interface RedditTitlecard extends Section {
 }
 
 export interface RedditComment extends Section {
+	showHeader: boolean;
+	showFooter: boolean;
+
+	commentDepth: number;
+	username: string;
+	timestamp: string;
+	score: number;
+
 	text: string;
 	audio: Audio;
 }

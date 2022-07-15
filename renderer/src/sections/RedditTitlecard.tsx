@@ -17,8 +17,8 @@ export const RedditTitlecardComponent = (props: Props) => {
 				style={{
 					display: 'flex',
 					flexDirection: 'row',
-					gap: '30px',
-					marginBottom: '30px',
+					gap: '28px',
+					marginBottom: 'var(--reddit-container-padding)',
 				}}
 			>
 				<img

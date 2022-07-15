@@ -33,7 +33,7 @@ public class Theta {
 
         this.server = new Server(this);
 
-        final var script = gson().fromJson(Files.newBufferedReader(config.scriptsDirectory().resolve("ask_reddit_cult.json")), Script.class);
+        final var script = gson().fromJson(Files.newBufferedReader(config.scriptsDirectory().resolve("script.json")), Script.class);
         final var video = new Video("bg_pk.mp4");
 
         final var titlecard = new RedditTitleCard();
@@ -43,10 +43,32 @@ public class Theta {
         titlecard.setText(audioManager, script.text);
         video.addSection(titlecard);
 
-        for (String sectionText : script.sections) {
-            final var section = new RedditComment();
-            section.setText(audioManager, sectionText);
-            video.addSection(section);
+        for (final var comment : script.comments) {
+            boolean isFirst = true;
+            int index = 0;
+
+            for (final var sectionText : comment.sections) {
+                final var section = new RedditComment();
+
+                section.setCommentDepth(comment.commentDepth);
+                section.setUsername(comment.username);
+                section.setTimestamp(comment.time);
+
+                if(!isFirst || comment.commentDepth != 0) {
+                    section.setShowPrevious(true);
+                }
+
+                if(isFirst) {
+                    section.setShowHeader(true);
+                    isFirst = false;
+                }
+
+//                if(index++ == comment.sections.size() - 1) section.setShowFooter(true);
+
+                section.setText(audioManager, sectionText);
+
+                video.addSection(section);
+            }
         }
 
         videoManager.addVideo("video", video);
