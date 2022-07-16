@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Set;
 
@@ -27,6 +26,7 @@ public class Server {
         this.theta = theta;
         this.app = Javalin.create(JavalinConfig::enableCorsForAllOrigins);
 
+        registerImageHandler();
         registerBackgroundHandler();
         registerAudioHandler();
         registerVideoHandler();
@@ -49,6 +49,14 @@ public class Server {
         running = false;
 
         app.stop();
+    }
+
+    private void registerImageHandler() {
+        app.get("/img/{id}", ctx -> {
+            final var id = ctx.pathParam("id");
+
+            ctx.contentType("image").result("");
+        });
     }
 
     private void registerBackgroundHandler() {
