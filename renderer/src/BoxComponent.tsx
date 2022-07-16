@@ -28,7 +28,7 @@ export const BoxComponent = (props: Props) => {
 	const opacity = interpolate(
 		frame,
 		[0, fps * (1 / 5), durationInFrames - (1 / 5) * fps, durationInFrames],
-		[fadeIn ? 0 : -100, 1, 1, fadeOut ? 0 : 100],
+		[fadeIn ? 0 : 1, 1, 1, fadeOut ? 0 : 1],
 		{easing: Easing.bezier(0.79, 0.57, 0.91, 0.78)}
 	);
 
