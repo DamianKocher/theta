@@ -5,8 +5,8 @@ import com.damiankocher.theta.server.audio.AudioSource;
 import com.damiankocher.theta.server.video.Section;
 import com.damiankocher.theta.server.video.Video;
 import com.damiankocher.theta.server.video.VideoManager;
-import com.damiankocher.theta.server.video.reddit.RedditComment;
-import com.damiankocher.theta.server.video.reddit.RedditTitleCard;
+import com.damiankocher.theta.server.video.sections.reddit.RedditComment;
+import com.damiankocher.theta.server.video.sections.reddit.RedditTitleCard;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -54,14 +54,14 @@ public class Theta {
                 section.setUsername(comment.username);
                 section.setTimestamp(comment.time);
 
-                if(!isFirst || comment.commentDepth != 0) {
-                    section.setShowPrevious(true);
-                }
-
-                if(isFirst) {
-                    section.setShowHeader(true);
-                    isFirst = false;
-                }
+//                if(!isFirst || comment.commentDepth != 0) {
+//                    section.setShowPrevious(true);
+//                }
+//
+//                if(isFirst) {
+//                    section.setShowHeader(true);
+//                    isFirst = false;
+//                }
 
 //                if(index++ == comment.sections.size() - 1) section.setShowFooter(true);
 

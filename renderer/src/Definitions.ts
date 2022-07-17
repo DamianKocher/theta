@@ -16,6 +16,7 @@ export interface Section {
 		fadeIn: boolean;
 		fadeOut: boolean;
 		duration: number;
+		description: string;
 	};
 }
 

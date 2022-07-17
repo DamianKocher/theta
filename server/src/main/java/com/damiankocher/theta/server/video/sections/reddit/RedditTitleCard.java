@@ -1,4 +1,4 @@
-package com.damiankocher.theta.server.video.reddit;
+package com.damiankocher.theta.server.video.sections.reddit;
 
 import com.damiankocher.theta.server.audio.AudioManager;
 import com.damiankocher.theta.server.audio.AudioSource;
@@ -29,6 +29,7 @@ public class RedditTitleCard extends Section {
 
     public void setUsername(@NotNull final String username) {
         this.username = username;
+        updateDescription();
     }
 
     public void setText(@NotNull final AudioManager audioManager, @NotNull final String text) {
@@ -36,6 +37,7 @@ public class RedditTitleCard extends Section {
         this.text = text;
 
         setDuration(audio.duration());
+        updateDescription();
     }
 
     public void setTimestamp(@NotNull final String timestamp) {
@@ -60,5 +62,10 @@ public class RedditTitleCard extends Section {
 
     public String timestamp() {
         return timestamp;
+    }
+
+    private void updateDescription() {
+        String _text = this.text() == null ? "" : this.text();
+        this.setDescription(String.format("u/%s - %s", this.username(), _text.substring(0, Math.min(_text.length(), 32))));
     }
 }

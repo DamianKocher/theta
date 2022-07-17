@@ -14,6 +14,8 @@ public abstract class Section {
     private boolean fadeOut;
     private double duration;
 
+    private @NotNull String description = "no description";
+
     public Section(final @NotNull String type, final boolean useStandardContainer, final boolean showPrevious, final boolean showNext, final boolean fadeIn, final boolean fadeOut, final int duration) {
         this.type = type;
         this.useStandardContainer = useStandardContainer;
@@ -42,6 +44,7 @@ public abstract class Section {
             addMetaBoolean(jsonSectionObject, jsonMeta, "fadeIn", section.fadeIn());
             addMetaBoolean(jsonSectionObject, jsonMeta, "fadeOut", section.fadeOut());
             addMetaDouble(jsonSectionObject, jsonMeta, "duration", section.duration());
+            addMetaString(jsonSectionObject, jsonMeta, "description", section.description());
 
             jsonSectionObject.add("_meta", jsonMeta);
 
@@ -110,5 +113,13 @@ public abstract class Section {
 
     public void setDuration(double duration) {
         this.duration = duration;
+    }
+
+    public String description() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

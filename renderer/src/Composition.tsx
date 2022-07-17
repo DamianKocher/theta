@@ -23,7 +23,7 @@ export const Comp = (content: Content) => {
 					<Series.Sequence
 						key={index}
 						durationInFrames={Math.ceil(section._meta.duration * fps)}
-						name={section._meta.type}
+						name={`${section._meta.type}: ${section._meta.description}`}
 						layout={'absolute-fill'}
 					>
 						{section._meta.useStandardContainer ? (

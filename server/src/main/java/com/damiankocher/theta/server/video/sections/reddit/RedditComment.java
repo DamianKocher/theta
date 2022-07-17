@@ -1,4 +1,4 @@
-package com.damiankocher.theta.server.video.reddit;
+package com.damiankocher.theta.server.video.sections.reddit;
 
 import com.damiankocher.theta.server.audio.AudioManager;
 import com.damiankocher.theta.server.audio.AudioSource;
