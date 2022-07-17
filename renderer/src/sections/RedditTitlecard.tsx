@@ -1,6 +1,5 @@
-import {Audio} from 'remotion';
+import {Audio, Img, staticFile} from 'remotion';
 import {RedditTitlecard} from '../Definitions';
-import redditLogo from './reddit_logo.png';
 
 interface Props {
 	redditTitlecard: RedditTitlecard;
@@ -17,14 +16,16 @@ export const RedditTitlecardComponent = (props: Props) => {
 				style={{
 					display: 'flex',
 					flexDirection: 'row',
+					alignItems: 'center',
 					gap: '28px',
 					marginBottom: 'var(--reddit-container-padding)',
 				}}
 			>
-				<img
-					src={redditLogo}
+				<Img
+					src={staticFile('reddit_logo.svg')}
 					style={{
-						height: '70px',
+						height: '76px',
+						filter: 'invert(1)',
 					}}
 				/>
 
