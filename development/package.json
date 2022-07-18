@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "scripts": {
+    "remotion:start": "remotion preview remotion/index.tsx",
+    "remotion:render": "remotion render remotion/index.tsx Theta out/video.mp4",
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview"
+  },
+  "dependencies": {
+    "@remotion/cli": "^3.0.0",
+    "@remotion/eslint-config": "^3.0.0",
+    "axios": "^0.27.2",
+    "eslint": "^8.14.0",
+    "prettier": "^2.6.2",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "remotion": "^3.0.0",
+    "typescript": "4.6.3"
+  },
+  "devDependencies": {
+    "nuxt": "3.0.0-rc.5"
+  }
+}

@@ -35,7 +35,7 @@ public class AudioManager {
         final var config = theta.config();
 
         final var textReplacementPath = config.textReplacementPath();
-        final var audioCahceDirectory = config.audioCacheDirectory();
+        final var audioCacheDirectory = config.audioCacheDirectory();
 
         if (Files.exists(textReplacementPath)) {
             this.textReplacer = new Gson().fromJson(Files.newBufferedReader(textReplacementPath), TextReplacer.class);
@@ -44,8 +44,8 @@ public class AudioManager {
             log.warn("text replacement file not found, using empty text replacer");
         }
 
-        if (!Files.exists(audioCahceDirectory)) {
-            Files.createDirectories(audioCahceDirectory);
+        if (!Files.exists(audioCacheDirectory)) {
+            Files.createDirectories(audioCacheDirectory);
         }
 
         textReplacer.logReplacements();
