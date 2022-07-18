@@ -13,24 +13,21 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class AudioManager {
 
     private static final @NotNull Logger log = LoggerFactory.getLogger(AudioManager.class);
 
     private static final @NotNull String DEFAULT_LANGUAGE_CODE = "en-US";
-    private static final @NotNull String DEFAULT_VOICE_NAME = "en-US-Wavenet-H";
+    private static final @NotNull String DEFAULT_VOICE_NAME = "en-US-Wavenet-D";
     private static final double DEFAULT_SPEAKING_RATE = 1.2d;
 
     private final @NotNull Theta theta;
 
     private final @NotNull TextReplacer textReplacer;
 
-    private final @NotNull Map<String, AudioSource> audioSourceLookup = new HashMap<>();
+    private final @NotNull Map<String, AudioSource> audioSourceLookup = new WeakHashMap<>();
 
     public AudioManager(final @NotNull Theta theta) throws IOException {
         this.theta = theta;
