@@ -16,17 +16,10 @@ public class RedditComment extends Section {
     private @NotNull String timestamp = "unknown";
     private int score = -1;
 
-    private @NotNull String text = "";
     private @Nullable AudioSource audio;
 
     public RedditComment() {
         super("reddit_comment", true, false, false, true, true, 0);
-    }
-
-    public RedditComment(final @NotNull AudioManager audioManager, final @NotNull String text) {
-        this();
-
-        setText(audioManager, text);
     }
 
     public boolean showHeader() {
@@ -77,18 +70,21 @@ public class RedditComment extends Section {
         this.score = score;
     }
 
-    public void setText(final @NotNull AudioManager audioManager, final @NotNull String text) {
-        this.text = text;
-        this.audio = audioManager.createAudioSource(text);
-
+    public void setAudio(final @NotNull AudioSource audio) {
+        this.audio = audio;
         setDuration(audio.duration());
-    }
-
-    public @NotNull String text() {
-        return text;
     }
 
     public @Nullable AudioSource audio() {
         return audio;
+    }
+
+    @Override
+    protected void updateDescription() {
+        String _text = audio().text().substring(0, Math.min(audio.text().length(), 32));
+
+        String _username = this.username();
+
+        this.setDescription(String.format("u/%s - %s", _username, _text));
     }
 }

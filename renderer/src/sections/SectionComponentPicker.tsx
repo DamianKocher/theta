@@ -1,13 +1,9 @@
-import {RedditTitlecard, Section} from '../Definitions';
-import {RedditCommentComponent} from './RedditComment';
-import {RedditTitlecardComponent} from './RedditTitlecard';
+import {RedditComment, RedditTitlecard, Section} from '../Definitions';
+import {RedditCommentComponent} from './reddit/comment/RedditComment';
+import {RedditTitlecardComponent} from './reddit/titlecard/RedditTitlecard';
 
-function isRedditTitlecard(section: Section): section is RedditTitlecard {
-	return section._meta.type === 'reddit_titlecard';
-}
-
-function isRedditComment(section: Section): section is RedditTitlecard {
-	return section._meta.type === 'reddit_comment';
+function isSectionType<Type>(section: any, type: string): section is Type {
+	return section._meta.type === type;
 }
 
 interface Props {
@@ -21,13 +17,13 @@ export const SectionComponentPicker = (props: Props) => {
 
 	return (
 		<div>
-			{isRedditTitlecard(section) && (
+			{isSectionType<RedditTitlecard>(section, 'reddit_titlecard') && (
 				<RedditTitlecardComponent
 					redditTitlecard={section}
 					muteAudio={!isPrimary}
 				/>
 			)}
-			{isRedditComment(section) && (
+			{isSectionType<RedditComment>(section, 'reddit_comment') && (
 				<RedditCommentComponent
 					redditComment={section}
 					muteAudio={!isPrimary}

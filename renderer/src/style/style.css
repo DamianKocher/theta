@@ -7,25 +7,25 @@
 	--reddit-font-title-size: 42px;
 	--reddit-font-title-weight: bold;
 
-	--reddit-font-normal-size: 36px;
+	--reddit-font-normal-size: 32px;
 	--reddit-font-normal-weight: normal;
 
-	--reddit-font-subtext-size: 32px;
+	--reddit-font-subtext-size: 28px;
 	--reddit-font-subtext-weight: 400;
 
 	--reddit-color-text: white;
 	--reddit-color-user: #04a5e5;
 	--reddit-color-subtext: #acb0be;
 
-	--reddit-container-background: black;
-	--reddit-container-width: 850px;
+	--reddit-container-background: rgba(1, 1, 1, 1);
+	--reddit-container-width: min(75%, 960px);
 	--reddit-container-padding: 42px;
 	--reddit-container-corner-roundness: 15px;
 }
 
 p,
 h1 {
-	color: white;
+	color: var(--reddit-color-text);
 	font-family: var(--reddit-font);
 }
 
@@ -47,9 +47,24 @@ p {
 	color: var(--reddit-color-user) !important;
 }
 
+.box-container {
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
 .box {
 	background: var(--reddit-container-background);
 	width: var(--reddit-container-width);
 	padding: var(--reddit-container-padding);
 	border-radius: var(--reddit-container-corner-roundness);
+
+	display: flex;
+	flex-direction: column;
+	gap: 3em;
+}
+
+.labels {
+	display: flex;
+	gap: calc(var(--reddit-container-padding) / 2);
 }

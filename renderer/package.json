@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"scripts": {
 		"start": "remotion preview src/index.tsx",
-		"render": "remotion render src/index.tsx RedditTTS out/video.mp4",
+		"render": "remotion render src/index.tsx Theta out/video.mp4",
 		"upgrade": "remotion upgrade",
 		"test": "eslint src --ext ts,tsx,js,jsx && tsc"
 	},

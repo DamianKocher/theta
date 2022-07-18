@@ -20,4 +20,9 @@ public class Image extends Section {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    @Override
+    protected void updateDescription() {
+        this.setDescription(url());
+    }
 }

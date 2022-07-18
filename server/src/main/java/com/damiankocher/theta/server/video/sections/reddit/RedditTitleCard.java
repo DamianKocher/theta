@@ -1,26 +1,19 @@
 package com.damiankocher.theta.server.video.sections.reddit;
 
-import com.damiankocher.theta.server.audio.AudioManager;
 import com.damiankocher.theta.server.audio.AudioSource;
 import com.damiankocher.theta.server.video.Section;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class RedditTitleCard extends Section {
 
-    private String subreddit;
-    private String username;
-    private String text;
-    private AudioSource audio;
-    private String timestamp;
+    private @NotNull String subreddit = "";
+    private @NotNull String username = "";
+    private @Nullable AudioSource audio;
+    private @NotNull String timestamp = "";
 
     public RedditTitleCard() {
         super("reddit_titlecard", true, false, false, false, true, 0);
-    }
-
-    public RedditTitleCard(final @NotNull AudioManager audioManager, final @NotNull String text) {
-        this();
-
-        setText(audioManager, text);
     }
 
     public void setSubreddit(@NotNull final String subreddit) {
@@ -32,12 +25,9 @@ public class RedditTitleCard extends Section {
         updateDescription();
     }
 
-    public void setText(@NotNull final AudioManager audioManager, @NotNull final String text) {
-        this.audio = audioManager.createAudioSource(text);
-        this.text = text;
-
+    public void setAudio(@NotNull final AudioSource audio) {
+        this.audio = audio;
         setDuration(audio.duration());
-        updateDescription();
     }
 
     public void setTimestamp(@NotNull final String timestamp) {
@@ -52,10 +42,6 @@ public class RedditTitleCard extends Section {
         return username;
     }
 
-    public String text() {
-        return text;
-    }
-
     public AudioSource audio() {
         return audio;
     }
@@ -64,8 +50,15 @@ public class RedditTitleCard extends Section {
         return timestamp;
     }
 
-    private void updateDescription() {
-        String _text = this.text() == null ? "" : this.text();
-        this.setDescription(String.format("u/%s - %s", this.username(), _text.substring(0, Math.min(_text.length(), 32))));
+    @Override
+    protected void updateDescription() {
+        if(audio() == null) {
+            setDescription("no audio");
+            return;
+        }
+
+        String text = audio().text().substring(0, Math.min(audio.text().length(), 32));
+
+        this.setDescription(String.format("u/%s - %s", username(), text));
     }
 }

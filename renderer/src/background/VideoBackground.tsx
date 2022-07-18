@@ -12,7 +12,6 @@ export const VideoBackgroundComponent = (props: {url: string}) => {
 					height,
 				}}
 				muted
-				startFrom={35}
 			/>
 		</AbsoluteFill>
 	);

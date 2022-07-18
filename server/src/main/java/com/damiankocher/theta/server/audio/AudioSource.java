@@ -5,6 +5,7 @@ import com.google.gson.JsonSerializer;
 import org.jetbrains.annotations.NotNull;
 
 public record AudioSource(
+        @NotNull String text,
         @NotNull String url,
         byte @NotNull [] data,
         double duration
@@ -18,6 +19,7 @@ public record AudioSource(
 
             final var jsonAudio = new JsonObject();
 
+            jsonAudio.addProperty("text", audio.text());
             jsonAudio.addProperty("url", audio.url());
 
             return jsonAudio;

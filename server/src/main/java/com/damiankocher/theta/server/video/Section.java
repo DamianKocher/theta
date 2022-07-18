@@ -26,6 +26,8 @@ public abstract class Section {
         this.duration = duration;
     }
 
+    protected abstract void updateDescription();
+
     public static @NotNull JsonSerializer<Section> createSerializer() {
         return (section, typeOfSrc, context) -> {
             if (section == null) {

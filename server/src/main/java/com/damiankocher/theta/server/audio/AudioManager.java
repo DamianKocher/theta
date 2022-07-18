@@ -70,8 +70,8 @@ public class AudioManager {
         return createAudioSource(text, DEFAULT_LANGUAGE_CODE, DEFAULT_VOICE_NAME, DEFAULT_SPEAKING_RATE);
     }
 
-    public @NotNull AudioSource createAudioSource(@NotNull String text, final @NotNull String languageCode, final @NotNull String voiceName, final double speakingRate) {
-        text = textReplacer.replaceText(text);
+    public @NotNull AudioSource createAudioSource(@NotNull final String originalText, final @NotNull String languageCode, final @NotNull String voiceName, final double speakingRate) {
+        final var text = textReplacer.replaceText(originalText);
         final var name = getName(text, languageCode, voiceName, speakingRate);
 
         final var shortText = text.substring(0, Math.min(text.length(), 40)) + (text.length() > 40 ? "..." : "");
@@ -86,7 +86,7 @@ public class AudioManager {
             log.info("found cached audio [filename: {}, text: {}]", name, shortText);
 
             try {
-                return createAudioSourceObject(name, Files.readAllBytes(audioCacheDirectory.resolve(name)));
+                return createAudioSourceObject(name, Files.readAllBytes(audioCacheDirectory.resolve(name)), originalText);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -111,16 +111,16 @@ public class AudioManager {
             log.info("generated audio [language code: {}, voice name: {}, speaking rate: {}, hashed name: {}, text: {}]", languageCode, voiceName, speakingRate, name, shortText);
 
             Files.write(audioCacheDirectory.resolve(name), data);
-            return createAudioSourceObject(name, data);
+            return createAudioSourceObject(name, data, originalText);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private AudioSource createAudioSourceObject(@NotNull final String name, final byte @NotNull [] data) {
+    private AudioSource createAudioSourceObject(@NotNull final String name, final byte @NotNull [] data, final @NotNull String text) {
         final var duration = data.length / 4000.0d + 0.2d; // mp3 is 32kbps so that's 4000 bytes per second, plus 0.2 seconds to account for inaccuracy in this crude estimate
 
-        final var audioSource = new AudioSource(name, data, duration);
+        final var audioSource = new AudioSource(text, name, data, duration);
         audioSourceLookup.put(name, audioSource);
 
         log.info("created audio source [name: {}, duration in seconds: {}]", name, duration);

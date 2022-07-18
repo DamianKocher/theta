@@ -1,31 +1,37 @@
 export interface Content {
 	background: string;
 	sections: Section[];
+	durationInFrames: number;
 }
 
-export interface Audio {
+export interface AudioSource {
 	url: string;
+	text: string;
 }
 
 export interface Section {
-	_meta: {
-		type: string;
-		useStandardContainer: boolean;
-		showPrevious: boolean;
-		showNext: boolean;
-		fadeIn: boolean;
-		fadeOut: boolean;
-		duration: number;
-		description: string;
-	};
+	_meta: SectionMeta;
+}
+
+export interface SectionMeta {
+	type: string;
+	useStandardContainer: boolean;
+	showPrevious: boolean;
+	showNext: boolean;
+	fadeIn: boolean;
+	fadeOut: boolean;
+	duration: number;
+	description: string;
+
+	durationInFrames: number;
 }
 
 export interface RedditTitlecard extends Section {
 	subreddit: string;
 	username: string;
-	text: string;
-	audio: Audio;
 	timestamp: string;
+
+	audio: AudioSource;
 }
 
 export interface RedditComment extends Section {
@@ -37,6 +43,5 @@ export interface RedditComment extends Section {
 	timestamp: string;
 	score: number;
 
-	text: string;
-	audio: Audio;
+	audio: AudioSource;
 }

@@ -40,7 +40,7 @@ public class Theta {
         titlecard.setSubreddit(script.subreddit);
         titlecard.setTimestamp(script.time);
         titlecard.setUsername(script.username);
-        titlecard.setText(audioManager, script.text);
+        titlecard.setAudio(audioManager.createAudioSource(script.text));
         video.addSection(titlecard);
 
         for (final var comment : script.comments) {
@@ -54,18 +54,18 @@ public class Theta {
                 section.setUsername(comment.username);
                 section.setTimestamp(comment.time);
 
-//                if(!isFirst || comment.commentDepth != 0) {
-//                    section.setShowPrevious(true);
-//                }
-//
-//                if(isFirst) {
-//                    section.setShowHeader(true);
-//                    isFirst = false;
-//                }
+                if(!isFirst || comment.commentDepth != 0) {
+                    section.setShowPrevious(true);
+                }
+
+                if(isFirst) {
+                    section.setShowHeader(true);
+                    isFirst = false;
+                }
 
 //                if(index++ == comment.sections.size() - 1) section.setShowFooter(true);
 
-                section.setText(audioManager, sectionText);
+                section.setAudio(audioManager.createAudioSource(sectionText));
 
                 video.addSection(section);
             }

@@ -17,12 +17,13 @@ export const Comp = (content: Content) => {
 	return (
 		<div>
 			<VideoBackgroundComponent url={background} />
+			{/* <GradientBackgroundComponent /> */}
 
 			<Series>
 				{sections.map((section, index) => (
 					<Series.Sequence
 						key={index}
-						durationInFrames={Math.ceil(section._meta.duration * fps)}
+						durationInFrames={section._meta.durationInFrames}
 						name={`${section._meta.type}: ${section._meta.description}`}
 						layout={'absolute-fill'}
 					>
